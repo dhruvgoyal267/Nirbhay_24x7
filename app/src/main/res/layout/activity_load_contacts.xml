@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/grey"
     tools:context=".view.activities.LoadContactsActivity">
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/contacts"
         android:layout_width="match_parent"

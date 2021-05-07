@@ -3,4 +3,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="addContact">addContact</string>
+    <string name="select">Select</string>
+    <string name="enable_shake_detector">Enable Shake Detector</string>
+    <string name="disable_shake_detector">Disable Shake Detector</string>
 </resources>

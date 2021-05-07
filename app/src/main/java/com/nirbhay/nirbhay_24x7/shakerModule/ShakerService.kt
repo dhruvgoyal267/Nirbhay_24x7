@@ -10,16 +10,16 @@ import android.hardware.SensorManager
 import android.os.IBinder
 import com.nirbhay.nirbhay_24x7.utilities.showMsg
 import kotlin.math.abs
+import kotlin.math.sqrt
 
 class ShakerService : Service(), SensorEventListener {
-    private var isItFirstTime = true
-    private var currentX: Float = 0f
-    private var currentY: Float = 0f
-    private var currentZ: Float = 0f
-    private var lastX: Float = 0f
-    private var lastY: Float = 0f
-    private var lastZ: Float = 0f
-    private var shakeThreshold: Float = 5f
+
+    private var acceleration: Float = 0f
+    private var shakeThreshold: Float = 15f
+    private val timeDiff: Long = 60000
+    private var lastShakeTime: Long = 0
+    private var curShakeTime: Long = 0
+    private var shakeCount: Int = 0
     override fun onBind(intent: Intent): IBinder? {
         return null
     }
@@ -45,24 +45,22 @@ class ShakerService : Service(), SensorEventListener {
 
     override fun onSensorChanged(event: SensorEvent?) {
         if (event != null) {
-            currentX = event.values[0]
-            currentY = event.values[1]
-            currentZ = event.values[2]
-            if (!isItFirstTime) {
-                val diffX = abs(lastX - currentX)
-                val diffY = abs(lastY - currentY)
-                val diffZ = abs(lastZ - currentZ)
+            curShakeTime = System.currentTimeMillis()
+            if (abs(lastShakeTime - curShakeTime) > timeDiff) {
+                val x = event.values[0]
+                val y = event.values[1]
+                val z = event.values[2]
+                acceleration = sqrt(x * x + y * y + z * z) - SensorManager.GRAVITY_EARTH
 
-                if ((diffX > shakeThreshold && diffY > shakeThreshold)
-                    || (diffX > shakeThreshold && diffZ > shakeThreshold)
-                    || (diffY > shakeThreshold && diffZ > shakeThreshold)
-                )
-                    this.showMsg("Shake detected")
+                if (acceleration > shakeThreshold) {
+                    lastShakeTime = curShakeTime
+                    shakeCount++
+                    if(shakeCount == 3) {
+                        this.showMsg("Shake Detected")
+                        shakeCount = 0
+                    }
+                }
             }
-            lastX = currentX
-            lastY = currentY
-            lastZ = currentZ
-            isItFirstTime = false
         }
     }
 
