@@ -5,8 +5,6 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Contact(
-    var contactName: String, var contactNumber: String, var isSelected: Boolean
+    var contactName: String, @PrimaryKey var contactNumber: String, var isSelected: Boolean
 ) {
-    @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
 }

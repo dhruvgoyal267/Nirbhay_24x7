@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/grey"
     tools:context=".view.activities.LoadContactsActivity">
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search_contact"
+        android:theme="@style/SearchViewStyle"
+        android:focusable="true"
+        android:layout_margin="8dp"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:iconifiedByDefault="false"
+        app:queryHint="@string/query_hint" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/contacts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:listitem="@layout/contact_layout" />
-</RelativeLayout>
+</LinearLayout>

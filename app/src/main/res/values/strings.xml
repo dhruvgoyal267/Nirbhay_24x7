@@ -1,9 +1,11 @@
 <resources>
-    <string name="app_name">Nirbhay_24x7</string>
+    <string name="app_name">Nirbhay 24x7</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="addContact">addContact</string>
     <string name="select">Select</string>
     <string name="enable_shake_detector">Enable Shake Detector</string>
     <string name="disable_shake_detector">Disable Shake Detector</string>
+    <string name="query_hint">Search contacts here....</string>
+    <string name="long_press_contacts_to_delete">Long press contacts to delete</string>
 </resources>

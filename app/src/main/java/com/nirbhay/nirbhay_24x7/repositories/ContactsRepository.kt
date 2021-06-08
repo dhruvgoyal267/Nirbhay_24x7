@@ -1,21 +1,25 @@
 package com.nirbhay.nirbhay_24x7.repositories
 
+import android.content.Context
 import android.provider.ContactsContract
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
+import androidx.room.Dao
+import com.nirbhay.nirbhay_24x7.database.ContactDatabase
+import com.nirbhay.nirbhay_24x7.database.ContactsDao
 import com.nirbhay.nirbhay_24x7.models.Contact
+import java.util.concurrent.Flow
 
 class ContactsRepository {
-    var contacts = MutableLiveData<List<Contact>>()
-
-    fun loadContactsFromPhone(activity: AppCompatActivity): LiveData<List<Contact>> {
-        val con = fetchContacts(activity)
-        contacts.value = con
-        return contacts
+    fun loadContactsFromPhone(activity: AppCompatActivity): List<Contact> {
+        return fetchContacts(activity)
     }
 
-    private fun fetchContacts(activity: AppCompatActivity): ArrayList<Contact> {
+    private fun fetchContacts(
+        activity: AppCompatActivity,
+      ): ArrayList<Contact> {
         val contactsList = ArrayList<Contact>()
         val cursor = activity.contentResolver
             .query(
@@ -33,7 +37,16 @@ class ContactsRepository {
         return contactsList
     }
 
-    fun loadContactsFromDatabase(): LiveData<List<Contact>> {
-        return contacts
+
+    suspend fun saveContactsToDatabase(contacts: List<Contact>, context: Context) {
+        val db = ContactDatabase.getDatabase(context)
+        val contactDao = db.contactsDao()
+        contactDao.insertContacts(contacts)
+    }
+
+    suspend fun loadContactsFromDatabase(context: Context): List<Contact> {
+        val db = ContactDatabase.getDatabase(context)
+        val contactDao = db.contactsDao()
+        return contactDao.getContacts()
     }
 }

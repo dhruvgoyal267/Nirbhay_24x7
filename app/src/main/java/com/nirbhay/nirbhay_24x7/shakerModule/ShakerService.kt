@@ -8,7 +8,8 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.IBinder
-import com.nirbhay.nirbhay_24x7.utilities.showMsg
+import com.nirbhay.nirbhay_24x7.gpsModule.GPSCoordinateFinder
+import com.nirbhay.nirbhay_24x7.notification.MyNotificationManager
 import kotlin.math.abs
 import kotlin.math.sqrt
 
@@ -19,15 +20,16 @@ class ShakerService : Service(), SensorEventListener {
     private val timeDiff: Long = 60000
     private var lastShakeTime: Long = 0
     private var curShakeTime: Long = 0
-    private var shakeCount: Int = 0
+
+
     override fun onBind(intent: Intent): IBinder? {
         return null
     }
 
-    override fun onCreate() {
-        super.onCreate()
-
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         registerSensor()
+        startForeground(26, MyNotificationManager(this).getNotification())
+        return START_STICKY
     }
 
     private fun registerSensor() {
@@ -54,19 +56,13 @@ class ShakerService : Service(), SensorEventListener {
 
                 if (acceleration > shakeThreshold) {
                     lastShakeTime = curShakeTime
-                    shakeCount++
-                    if(shakeCount == 3) {
-                        this.showMsg("Shake Detected")
-                        shakeCount = 0
-                    }
+                    val gps = GPSCoordinateFinder(this)
+                    gps.sendUpdatedLocation()
                 }
             }
         }
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        return START_STICKY
-    }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
     }

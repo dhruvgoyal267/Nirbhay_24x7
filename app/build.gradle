@@ -2,17 +2,17 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
-}
+   }
 kapt {
     correctErrorTypes = true
 }
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.nirbhay.nirbhay_24x7"
-        minSdkVersion 16
+        minSdkVersion 26
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -45,26 +45,30 @@ android {
 }
 
 dependencies {
-    //groupie library
-    def groupie_version = "2.9.0"
-    implementation "com.xwray:groupie:$groupie_version"
-    implementation "com.xwray:groupie-databinding:$groupie_version"
-    implementation "com.xwray:groupie-kotlin-android-extensions:$groupie_version"
-
     def room_version = "2.3.0"
-
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+    implementation 'androidx.room:room-ktx:2.3.0'
+    kapt "androidx.room:room-compiler:2.3.0"
+
 
     //coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
 
-    //progressbar
-    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.4.31"
-    implementation 'androidx.core:core-ktx:1.3.2'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    //location
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
+
+
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.0"
+    implementation 'androidx.core:core-ktx:1.5.0'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
