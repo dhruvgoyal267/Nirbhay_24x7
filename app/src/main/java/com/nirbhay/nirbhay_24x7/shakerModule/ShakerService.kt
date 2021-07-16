@@ -8,6 +8,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.IBinder
+import android.util.Log
 import com.nirbhay.nirbhay_24x7.gpsModule.GPSCoordinateFinder
 import com.nirbhay.nirbhay_24x7.notification.MyNotificationManager
 import kotlin.math.abs
@@ -17,13 +18,18 @@ class ShakerService : Service(), SensorEventListener {
 
     private var acceleration: Float = 0f
     private var shakeThreshold: Float = 15f
-    private val timeDiff: Long = 60000
+    private val timeDiff: Long = 10000
     private var lastShakeTime: Long = 0
     private var curShakeTime: Long = 0
-
+    private lateinit var gps: GPSCoordinateFinder
 
     override fun onBind(intent: Intent): IBinder? {
         return null
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        gps = GPSCoordinateFinder(this)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -40,7 +46,7 @@ class ShakerService : Service(), SensorEventListener {
             sensorManager.registerListener(
                 this,
                 accelerometerSensor,
-                SensorManager.SENSOR_DELAY_NORMAL
+                SensorManager.SENSOR_STATUS_ACCURACY_HIGH
             )
         }
     }
@@ -53,10 +59,8 @@ class ShakerService : Service(), SensorEventListener {
                 val y = event.values[1]
                 val z = event.values[2]
                 acceleration = sqrt(x * x + y * y + z * z) - SensorManager.GRAVITY_EARTH
-
                 if (acceleration > shakeThreshold) {
                     lastShakeTime = curShakeTime
-                    val gps = GPSCoordinateFinder(this)
                     gps.sendUpdatedLocation()
                 }
             }

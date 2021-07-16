@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -36,13 +37,9 @@ class GPSCoordinateFinder(private val context: Context) {
                     val addresses: List<Address> =
                         geoCoder.getFromLocation(it.latitude, it.longitude, 1)
                     val address: String = addresses[0].getAddressLine(0)
-                    val city: String = addresses[0].locality
-                    val state: String = addresses[0].adminArea
-                    val zip: String = addresses[0].postalCode
-                    val country: String = addresses[0].countryName
                     sendSms(
                         contactDao.getContacts(),
-                        "There is an emergency, I am at $address, $city, $state, $zip, $country"
+                        "There is an emergency, I am at $address\nReach me at http://maps.google.com/maps?q=${it.latitude},${it.longitude}"
                     )
                 } catch (e: Exception) {
                 }
